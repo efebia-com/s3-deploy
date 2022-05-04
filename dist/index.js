@@ -1016,18 +1016,17 @@ const exec = __webpack_require__(986);
 let deploy = function (folder, bucket, distId, invalidation) {
   return new Promise((resolve, reject) => {
     try {
-      const command = `npx s3-deploy@1.4.0 ./** \
+      const command = `npx s3-deploy@1.4.0 ./${folder}/** \
                         --bucket ${bucket} \
-                        --cwd . \
+                        --cwd ./${folder}/ \
                         --distId ${distId} \
                         --etag \
                         --gzip xml,html,htm,js,css,ttf,otf,svg,txt \
                         --invalidate "${invalidation}" \
                         --noCache `;
-
       const cwd = path.resolve(folder);
-      exec.exec(`echo ${cwd} ${process.cwd()} ${folder}`, [], {}).then(() => {
-        return exec.exec(command, [], { cwd }).then(resolve);
+      exec.exec(`ls -larth`, [], { cwd }).then(() => {
+        return exec.exec(command, []).then(resolve);
       }).catch(reject);
       
     } catch (e) {
