@@ -4,9 +4,9 @@ const exec = require("@actions/exec");
 let deploy = function (folder, bucket, distId, invalidation) {
   return new Promise((resolve, reject) => {
     try {
-      const command = `npx s3-deploy@1.4.0 ./${folder}/** \
+      const command = `npx s3-deploy@1.4.0 ./** \
                         --bucket ${bucket} \
-                        --cwd ./${folder}/ \
+                        --cwd . \
                         --distId ${distId} \
                         --etag \
                         --gzip xml,html,htm,js,css,ttf,otf,svg,txt \
@@ -14,7 +14,7 @@ let deploy = function (folder, bucket, distId, invalidation) {
                         --noCache `;
       const cwd = path.resolve(folder);
       exec.exec(`ls -larth`, [], { cwd }).then(() => {
-        return exec.exec(command, []).then(resolve);
+        return exec.exec(command, [], { cwd }).then(resolve);
       }).catch(reject);
       
     } catch (e) {
