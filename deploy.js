@@ -14,6 +14,7 @@ let deploy = function (folder, bucket, distId, invalidation) {
                         --noCache `;
 
       const cwd = path.resolve(folder);
+      console.log(cwd);
       exec.exec(command, [], { cwd }).then(resolve).catch(reject);
     } catch (e) {
       reject(e);
